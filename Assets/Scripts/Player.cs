@@ -12,6 +12,9 @@ public class Player : MonoBehaviour
     private GameObject _laserPrefab;
 
     [SerializeField]
+    private GameObject _tripleShotPrefab;
+
+    [SerializeField]
     private float _fireRate = 0.5f;
 
     [SerializeField]
@@ -22,7 +25,10 @@ public class Player : MonoBehaviour
 
     private float _canFire = -1f;
 
+    [SerializeField]
+    private bool _isTripleShotActive = false;
 
+    
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +42,7 @@ public class Player : MonoBehaviour
             Debug.LogError("Spawn Manager is Null");
         }
 
+       
     }
 
     // Update is called once per frame
@@ -44,14 +51,26 @@ public class Player : MonoBehaviour
         CalculateMovement();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
-            FireLaser();
+            if (_isTripleShotActive)
+            {
+                Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+            }
+            else
+            { 
+                FireLaser(); 
+            }
+
         }
+        Debug.Log("Lives " + _lives);
     }
+
 
     void FireLaser()
     {    
            _canFire = Time.time + _fireRate;
-           Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
+           Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+
+
         
     }
 
@@ -86,6 +105,25 @@ public class Player : MonoBehaviour
 
             Destroy(this.gameObject);
         }
+    
+        for(int i=0; i<_speed;i++)
+        {
+
+        }
+        
     }
+
+    public void TripleShotActive()
+    {
+        _isTripleShotActive = true;
+        StartCoroutine(TripleShotPowerDownRoutine());
+    }
+
+    IEnumerator TripleShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+        _isTripleShotActive = false;
+    }
+
 
 }
