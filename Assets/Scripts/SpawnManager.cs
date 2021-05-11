@@ -11,8 +11,13 @@ public class SpawnManager : MonoBehaviour
     GameObject _enemyPrefab;
     [SerializeField]
     private GameObject _EnemyContainer;
+    //[SerializeField]
+    //private GameObject _tripleShotPowerupPrefab;
+   // [SerializeField]
+   // private GameObject _SpeedBoostPowerupPrefab;
+
     [SerializeField]
-    private GameObject _tripleShotPowerupPrefab;
+    private GameObject[] _powerUps;
 
     private bool _spawning = true;
 
@@ -26,7 +31,7 @@ public class SpawnManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+       
     }
 
     IEnumerator SpawnEnemyRoutine()
@@ -38,7 +43,7 @@ public class SpawnManager : MonoBehaviour
            GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
 
             newEnemy.transform.parent = _EnemyContainer.transform;
-
+            
            yield return new WaitForSeconds(_spawnTime);
         }
 
@@ -51,7 +56,9 @@ public class SpawnManager : MonoBehaviour
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
 
-            GameObject newPowerUp = Instantiate(_tripleShotPowerupPrefab, posToSpawn, Quaternion.identity);
+            int powerUpIndex = Random.Range(0, _powerUps.Length);
+
+            GameObject newPowerUp = Instantiate(_powerUps[powerUpIndex], posToSpawn, Quaternion.identity);
 
             yield return new WaitForSeconds(Random.Range(3, 8));
 
