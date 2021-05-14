@@ -27,6 +27,12 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private GameObject _shields;
+
+    [SerializeField]
+    private GameObject _leftEngine;
+
+    [SerializeField]
+    private GameObject _rightEngine;
     
     private SpawnManager _spawnManager;
 
@@ -127,6 +133,16 @@ public class Player : MonoBehaviour
 
         _lives -= 1;
 
+        if(_lives == 2)
+        {
+            _leftEngine.SetActive(true);
+        }
+
+        if(_lives == 1)
+        {
+            _rightEngine.SetActive(true);
+        }    
+
         _uiManager.UpdateLives(_lives);
 
         if(_lives < 1)
@@ -139,10 +155,7 @@ public class Player : MonoBehaviour
 
         }
     
-        for(int i=0; i<_speed;i++)
-        {
-
-        }
+        
         
     }
 
