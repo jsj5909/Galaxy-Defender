@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField]
+    private float _speedBoost = 8.5f;
+
+    [SerializeField]
+    private float _normalSpeed = 5;
 
     [SerializeField]
     private float _speed = 3.5f;
@@ -12,30 +17,53 @@ public class Player : MonoBehaviour
     private GameObject _laserPrefab;
 
     [SerializeField]
+    private GameObject _tripleShotPrefab;
+
+    [SerializeField]
     private float _fireRate = 0.5f;
 
     [SerializeField]
     private int _lives = 3;
 
+    [SerializeField]
+    private GameObject _shields;
     
     private SpawnManager _spawnManager;
 
     private float _canFire = -1f;
 
+  
+    private bool _isTripleShotActive = false;
 
+    [SerializeField]
+    private bool _shieldsActive = false;
 
+    private int _score;
+
+    private UIManager _uiManager;
     // Start is called before the first frame update
     void Start()
     {
         transform.position = Vector3.zero;
 
-        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>(); 
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
         if(_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is Null");
         }
 
+        if(_uiManager == null)
+        {
+            Debug.LogError("The UI Manager is null");
+        }
+
+        _speed = _normalSpeed;
+
+        _shields.SetActive(false);
+       
     }
 
     // Update is called once per frame
@@ -44,14 +72,26 @@ public class Player : MonoBehaviour
         CalculateMovement();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
-            FireLaser();
+            if (_isTripleShotActive)
+            {
+                Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+            }
+            else
+            { 
+                FireLaser(); 
+            }
+
         }
+        Debug.Log("Lives " + _lives);
     }
+
 
     void FireLaser()
     {    
            _canFire = Time.time + _fireRate;
-           Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
+           Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+
+
         
     }
 
@@ -78,14 +118,68 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        if (_shieldsActive)
+        {
+            _shields.SetActive(false);
+            _shieldsActive = false;
+            return;
+        }
+
         _lives -= 1;
+
+        _uiManager.UpdateLives(_lives);
 
         if(_lives < 1)
         {
             _spawnManager.OnPlayerDeath();
 
+           
+            
             Destroy(this.gameObject);
+
         }
+    
+        for(int i=0; i<_speed;i++)
+        {
+
+        }
+        
     }
 
+    public void TripleShotActive()
+    {
+        _isTripleShotActive = true;
+        StartCoroutine(TripleShotPowerDownRoutine());
+    }
+
+    IEnumerator TripleShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+        _isTripleShotActive = false;
+    }
+
+    public void SpeedActive()
+    {
+        StartCoroutine(SpeedPowerDownRoutine());
+    }
+
+    IEnumerator SpeedPowerDownRoutine()
+    {
+        _speed = _speedBoost;
+        yield return new WaitForSeconds(5);
+        _speed = _normalSpeed;
+    }
+
+   public void ShieldsActive()
+    {
+        _shieldsActive = true;
+        _shields.SetActive(true);
+    }
+
+    public void AddScore(int points)
+    {
+        _score += points;
+
+        _uiManager.UpdateScore(_score);
+    }
 }
