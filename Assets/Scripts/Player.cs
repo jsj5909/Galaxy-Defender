@@ -33,7 +33,12 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private GameObject _rightEngine;
-    
+
+    [SerializeField]
+    private AudioClip _laserSound;
+
+    private AudioSource _audio;
+
     private SpawnManager _spawnManager;
 
     private float _canFire = -1f;
@@ -56,6 +61,8 @@ public class Player : MonoBehaviour
 
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
+        _audio = GetComponent<AudioSource>();
+
         if(_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is Null");
@@ -64,6 +71,11 @@ public class Player : MonoBehaviour
         if(_uiManager == null)
         {
             Debug.LogError("The UI Manager is null");
+        }
+
+        if (_audio == null)
+        {
+            Debug.LogError("The audio source is null");
         }
 
         _speed = _normalSpeed;
@@ -86,7 +98,7 @@ public class Player : MonoBehaviour
             { 
                 FireLaser(); 
             }
-
+            _audio.PlayOneShot(_laserSound);
         }
         Debug.Log("Lives " + _lives);
     }

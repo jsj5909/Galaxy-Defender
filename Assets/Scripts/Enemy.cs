@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
 
     Animator _anim;
 
+    AudioSource _audio;
     
 
     void Start()
@@ -19,6 +20,11 @@ public class Enemy : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<Player>();
 
         _anim = GetComponent<Animator>();
+
+        _audio = GetComponent<AudioSource>();
+
+
+
     }
 
     // Update is called once per frame
@@ -47,7 +53,11 @@ public class Enemy : MonoBehaviour
                 _player.Damage();
             }
 
+            _audio.Play();
+
             Destroy(gameObject,2.8f);
+
+            
         }
 
         if(other.gameObject.tag == "Laser")
@@ -61,6 +71,8 @@ public class Enemy : MonoBehaviour
                 _player.AddScore(10);
             }
 
+            _audio.Play();
+
             Destroy(gameObject,2.8f);
 
             _anim.SetTrigger("OnEnemyDeath");
@@ -70,4 +82,6 @@ public class Enemy : MonoBehaviour
         
            
     }
+ 
+
 }
