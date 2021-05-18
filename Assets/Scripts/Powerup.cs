@@ -55,9 +55,6 @@ public class Powerup : MonoBehaviour
               
             }
 
-          //  SpriteRenderer sprite = GetComponent<SpriteRenderer>();
-          //  sprite.enabled = false;
-
             Destroy(gameObject);
         }
     }
