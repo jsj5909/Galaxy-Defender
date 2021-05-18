@@ -264,6 +264,12 @@ public class Player : MonoBehaviour
         _currentAmmo = _maxAmmo;
         _uiManager.UpdateAmmo(_currentAmmo);
     }
+    public void Heal()
+    {
+        _lives += 1;
+
+        _uiManager.UpdateLives(_lives);
+    }
 }
 
   
