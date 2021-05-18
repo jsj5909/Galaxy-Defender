@@ -40,6 +40,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _thrusterSpeed = 10f;
 
+    private int _shieldStrength = 3;
+
     private AudioSource _audio;
 
     private SpawnManager _spawnManager;
@@ -55,6 +57,9 @@ public class Player : MonoBehaviour
     private int _score;
 
     private UIManager _uiManager;
+
+    private
+
     // Start is called before the first frame update
     void Start()
     {
@@ -117,6 +122,31 @@ public class Player : MonoBehaviour
             _audio.PlayOneShot(_laserSound);
         }
         Debug.Log("Lives " + _lives);
+
+        if(_shieldsActive)
+        {
+            SpriteRenderer shieldRenderer = _shields.GetComponent<SpriteRenderer>();
+
+            switch (_shieldStrength)
+            {
+                case 0:
+                    _shields.SetActive(false);
+                    _shieldsActive = false;
+                    break;
+                case 1:
+                    shieldRenderer.color = Color.red;
+                    break;
+                case 2:
+                    shieldRenderer.color = Color.yellow;
+                    break;
+                case 3:
+                    shieldRenderer.color = Color.white;
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 
 
@@ -154,8 +184,7 @@ public class Player : MonoBehaviour
     {
         if (_shieldsActive)
         {
-            _shields.SetActive(false);
-            _shieldsActive = false;
+            _shieldStrength--;
             return;
         }
 
@@ -215,6 +244,7 @@ public class Player : MonoBehaviour
     {
         _shieldsActive = true;
         _shields.SetActive(true);
+        _shieldStrength = 3; // there are 3 levels of shields
     }
 
     public void AddScore(int points)
