@@ -37,6 +37,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private AudioClip _laserSound;
 
+    [SerializeField]
+    private float _thrusterSpeed = 10f;
+
     private AudioSource _audio;
 
     private SpawnManager _spawnManager;
@@ -87,7 +90,20 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+        
         CalculateMovement();
+        
+        if(Input.GetKey(KeyCode.LeftShift) && _speed != _speedBoost)
+        {
+            _speed = _thrusterSpeed;
+        }
+        else if(_speed != _speedBoost)
+        {
+            _speed = _normalSpeed;
+        }
+
+
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
             if (_isTripleShotActive)
