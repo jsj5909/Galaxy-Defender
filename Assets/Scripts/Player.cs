@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
 
     private int _currentAmmo = 15;
 
-  
+
     private bool _isTripleShotActive = false;
 
     [SerializeField]
@@ -75,12 +75,12 @@ public class Player : MonoBehaviour
 
         _audio = GetComponent<AudioSource>();
 
-        if(_spawnManager == null)
+        if (_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is Null");
         }
 
-        if(_uiManager == null)
+        if (_uiManager == null)
         {
             Debug.LogError("The UI Manager is null");
         }
@@ -93,21 +93,21 @@ public class Player : MonoBehaviour
         _speed = _normalSpeed;
 
         _shields.SetActive(false);
-       
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        
+
+
         CalculateMovement();
-        
-        if(Input.GetKey(KeyCode.LeftShift) && _speed != _speedBoost)
+
+        if (Input.GetKey(KeyCode.LeftShift) && _speed != _speedBoost)
         {
             _speed = _thrusterSpeed;
         }
-        else if(_speed != _speedBoost)
+        else if (_speed != _speedBoost)
         {
             _speed = _normalSpeed;
         }
@@ -120,14 +120,14 @@ public class Player : MonoBehaviour
                 Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
             }
             else
-            { 
-                FireLaser(); 
+            {
+                FireLaser();
             }
             _audio.PlayOneShot(_laserSound);
         }
         Debug.Log("Lives " + _lives);
 
-        if(_shieldsActive)
+        if (_shieldsActive)
         {
             SpriteRenderer shieldRenderer = _shields.GetComponent<SpriteRenderer>();
 
@@ -155,13 +155,13 @@ public class Player : MonoBehaviour
 
 
     void FireLaser()
-    {    
-           _canFire = Time.time + _fireRate;
-           Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+    {
+        _canFire = Time.time + _fireRate;
+        Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
         _currentAmmo -= 1;
         _uiManager.UpdateAmmo(_currentAmmo);
 
-        
+
     }
 
     void CalculateMovement()
@@ -195,30 +195,30 @@ public class Player : MonoBehaviour
 
         _lives -= 1;
 
-        if(_lives == 2)
+        if (_lives == 2)
         {
             _leftEngine.SetActive(true);
         }
 
-        if(_lives == 1)
+        if (_lives == 1)
         {
             _rightEngine.SetActive(true);
-        }    
+        }
 
         _uiManager.UpdateLives(_lives);
 
-        if(_lives < 1)
+        if (_lives < 1)
         {
             _spawnManager.OnPlayerDeath();
 
-           
-            
+
+
             Destroy(this.gameObject);
 
         }
-    
-        
-        
+
+
+
     }
 
     public void TripleShotActive()
@@ -245,7 +245,7 @@ public class Player : MonoBehaviour
         _speed = _normalSpeed;
     }
 
-   public void ShieldsActive()
+    public void ShieldsActive()
     {
         _shieldsActive = true;
         _shields.SetActive(true);
@@ -262,5 +262,8 @@ public class Player : MonoBehaviour
     public void RefillAmmo()
     {
         _currentAmmo = _maxAmmo;
+        _uiManager.UpdateAmmo(_currentAmmo);
     }
 }
+
+  
