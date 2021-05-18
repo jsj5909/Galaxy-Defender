@@ -20,6 +20,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Text _restartText;
+
+    [SerializeField]
+    private Text _ammoText;
     
     private GameManager _gameManager;
     
@@ -48,6 +51,11 @@ public class UIManager : MonoBehaviour
     public void UpdateScore(int score)
     {
         _scoreText.text = "Score: " + score.ToString();
+    }
+
+    public void UpdateAmmo(int ammo)
+    {
+        _ammoText.text = "Ammo: " + ammo.ToString();
     }
 
     public void UpdateLives(int currentLives)

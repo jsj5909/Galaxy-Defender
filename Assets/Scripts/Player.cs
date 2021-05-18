@@ -48,6 +48,10 @@ public class Player : MonoBehaviour
 
     private float _canFire = -1f;
 
+    private int _maxAmmo = 15;
+
+    private int _currentAmmo = 15;
+
   
     private bool _isTripleShotActive = false;
 
@@ -109,7 +113,7 @@ public class Player : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire && _currentAmmo > 0)
         {
             if (_isTripleShotActive)
             {
@@ -154,7 +158,8 @@ public class Player : MonoBehaviour
     {    
            _canFire = Time.time + _fireRate;
            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
-
+        _currentAmmo -= 1;
+        _uiManager.UpdateAmmo(_currentAmmo);
 
         
     }
@@ -252,5 +257,10 @@ public class Player : MonoBehaviour
         _score += points;
 
         _uiManager.UpdateScore(_score);
+    }
+
+    public void RefillAmmo()
+    {
+        _currentAmmo = _maxAmmo;
     }
 }

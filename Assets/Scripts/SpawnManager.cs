@@ -50,11 +50,12 @@ public class SpawnManager : MonoBehaviour
            GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
 
             newEnemy.transform.parent = _EnemyContainer.transform;
-            
-           yield return new WaitForSeconds(_spawnTime);
-        }
 
-       
+            yield return new WaitForSeconds(_spawnTime);
+            
+
+        }
+        
     }
 
     IEnumerator SpawnPowerupRoutine()
