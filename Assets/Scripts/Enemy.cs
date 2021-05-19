@@ -90,11 +90,14 @@ public class Enemy : MonoBehaviour
             
         }
 
-        if(other.gameObject.tag == "Laser")
+        if(other.gameObject.tag == "Laser" || other.gameObject.tag == "Player_Beam_Weapon")
         {
             _speed = 0;
-            
-            Destroy(other.gameObject);
+
+            if (other.gameObject.tag == "Laser")
+            {
+                Destroy(other.gameObject);
+            }
 
             if(_player != null)
             {

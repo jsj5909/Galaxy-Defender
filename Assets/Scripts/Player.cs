@@ -20,6 +20,9 @@ public class Player : MonoBehaviour
     private GameObject _tripleShotPrefab;
 
     [SerializeField]
+    private GameObject _beamPrefab;
+
+    [SerializeField]
     private float _fireRate = 0.5f;
 
     [SerializeField]
@@ -57,6 +60,8 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private bool _shieldsActive = false;
+
+    private bool _isBeamActive = false;
 
     private int _score;
 
@@ -111,7 +116,6 @@ public class Player : MonoBehaviour
         {
             _speed = _normalSpeed;
         }
-
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire && _currentAmmo > 0)
         {
@@ -221,6 +225,22 @@ public class Player : MonoBehaviour
 
     }
 
+    public void BeamActive()
+    {
+        _isBeamActive = true;
+        _beamPrefab.SetActive(true);
+        StartCoroutine(BeamPowerDownRoutine());
+
+    }
+
+    IEnumerator BeamPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5);
+        _beamPrefab.SetActive(false);
+        _isBeamActive = false;
+
+    }
+
     public void TripleShotActive()
     {
         _isTripleShotActive = true;
@@ -267,6 +287,14 @@ public class Player : MonoBehaviour
     public void Heal()
     {
         _lives += 1;
+
+
+        if (_lives < 0)
+            _lives = 0;
+
+        if (_lives > 3)
+            _lives = 3;
+
 
         _uiManager.UpdateLives(_lives);
     }
