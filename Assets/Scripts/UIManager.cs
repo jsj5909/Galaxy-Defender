@@ -23,6 +23,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Text _ammoText;
+
+    [SerializeField]
+    private Slider _thrusterPower;
     
     private GameManager _gameManager;
     
@@ -89,5 +92,10 @@ public class UIManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
         }
-    }    
+    } 
+    
+    public void SetThrusterPower(float power)
+    {
+        _thrusterPower.value = power;
+    }
 }

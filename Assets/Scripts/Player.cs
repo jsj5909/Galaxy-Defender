@@ -5,6 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
+    private float _thrustCost = 0.1f;
+    
+    [SerializeField]
     private float _speedBoost = 8.5f;
 
     [SerializeField]
@@ -67,6 +70,10 @@ public class Player : MonoBehaviour
 
     private UIManager _uiManager;
 
+    private bool _thrustersActive = false;
+
+    private float _currentThrustPower = 1f;
+
    
 
     // Start is called before the first frame update
@@ -110,11 +117,21 @@ public class Player : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift) && _speed != _speedBoost)
         {
-            _speed = _thrusterSpeed;
+            if (_currentThrustPower > 0.1f)
+            {
+                _speed = _thrusterSpeed;
+                _thrustersActive = true;
+            }
+            else
+            {
+                _thrustersActive = false;
+                _speed = _normalSpeed;
+            }
         }
         else if (_speed != _speedBoost)
         {
             _speed = _normalSpeed;
+            _thrustersActive = false;
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire && _currentAmmo > 0)
@@ -153,6 +170,30 @@ public class Player : MonoBehaviour
                 default:
                     break;
             }
+        }
+
+        if(_thrustersActive)
+        {
+            _currentThrustPower -=_thrustCost * Time.deltaTime;
+
+            
+            if (_currentThrustPower  < 0)
+            {
+                _currentThrustPower = 0;
+            }
+
+            _uiManager.SetThrusterPower(_currentThrustPower);
+        }
+        else
+        {
+            _currentThrustPower += _thrustCost/2 * Time.deltaTime;
+
+            if (_currentThrustPower > 1f)
+            {
+                _currentThrustPower = 1f;
+            }
+
+            _uiManager.SetThrusterPower(_currentThrustPower);
         }
 
     }
