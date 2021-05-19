@@ -67,7 +67,7 @@ public class Player : MonoBehaviour
 
     private UIManager _uiManager;
 
-    private
+   
 
     // Start is called before the first frame update
     void Start()
@@ -211,6 +211,9 @@ public class Player : MonoBehaviour
 
         _uiManager.UpdateLives(_lives);
 
+        
+
+
         if (_lives < 1)
         {
             _spawnManager.OnPlayerDeath();
@@ -219,6 +222,10 @@ public class Player : MonoBehaviour
 
             Destroy(this.gameObject);
 
+        }
+        else
+        {
+            Camera.main.GetComponent<CameraShake>().ShakeCamera();
         }
 
 
