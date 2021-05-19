@@ -47,6 +47,15 @@ public class Powerup : MonoBehaviour
                     case 2:
                         player.ShieldsActive();
                         break;
+                    case 3:
+                        player.RefillAmmo();
+                        break;
+                    case 4:
+                        player.Heal();
+                        break;
+                    case 5:
+                        player.BeamActive();
+                        break;
                     default:
                         break;
                 }
@@ -54,9 +63,6 @@ public class Powerup : MonoBehaviour
                 
               
             }
-
-          //  SpriteRenderer sprite = GetComponent<SpriteRenderer>();
-          //  sprite.enabled = false;
 
             Destroy(gameObject);
         }

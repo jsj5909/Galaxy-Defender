@@ -20,6 +20,12 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Text _restartText;
+
+    [SerializeField]
+    private Text _ammoText;
+
+    [SerializeField]
+    private Slider _thrusterPower;
     
     private GameManager _gameManager;
     
@@ -50,8 +56,14 @@ public class UIManager : MonoBehaviour
         _scoreText.text = "Score: " + score.ToString();
     }
 
+    public void UpdateAmmo(int ammo)
+    {
+        _ammoText.text = "Ammo: " + ammo.ToString();
+    }
+
     public void UpdateLives(int currentLives)
     {
+        
         _livesImage.sprite = _lives[currentLives];
 
         if (currentLives < 1)
@@ -80,5 +92,10 @@ public class UIManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
         }
-    }    
+    } 
+    
+    public void SetThrusterPower(float power)
+    {
+        _thrusterPower.value = power;
+    }
 }
