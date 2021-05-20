@@ -17,10 +17,19 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private GameObject _laserPrefab;
 
+    [SerializeField]
+    private float _maxLateralMove = 7;
+
+    private bool _movingLaterally = false;
+
+    private bool _movingLeft = false;
+
     
     private float _fireRate = 3.0f;
 
     private float _canFire = -1.0f;
+
+    float _xOffset = 0;
 
     void Start()
     {
@@ -30,8 +39,17 @@ public class Enemy : MonoBehaviour
 
         _audio = GetComponent<AudioSource>();
 
+        int lateralMove = Random.Range(0, 2);
 
-
+        if(lateralMove == 0)
+        {
+            _movingLaterally = false;
+        }
+        else
+        {
+            _movingLaterally = true;
+        }
+        
     }
 
     // Update is called once per frame
@@ -61,7 +79,45 @@ public class Enemy : MonoBehaviour
 
     void CalculateMovement()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        //if side to side movement
+        //if movingLeft
+        //    move left
+        //    if reached max left
+        //        movingRight
+        //   move right
+        //          if moved max righ
+        //           move left
+
+       
+
+        if(_movingLaterally)
+        {
+            if(_movingLeft)
+            {
+                _xOffset -= 0.015f;
+                if( _xOffset < -_maxLateralMove)
+                {
+                    _movingLeft = false;
+
+                    Debug.Log("xOffset: " + _xOffset.ToString());
+                    Debug.Log("MLM:" + _maxLateralMove.ToString());
+                }
+            }
+            else
+            {
+                _xOffset += 0.01f;
+                if(_xOffset > _maxLateralMove)
+                {
+                    _movingLeft = true;
+                    Debug.Log("xOffset: " + _xOffset.ToString());
+                    Debug.Log("MLM:" + _maxLateralMove.ToString());
+                }
+            }
+            
+        }
+
+
+        transform.Translate((Vector3.down + new Vector3(_xOffset,0,0)) * _speed * Time.deltaTime);
 
         if (transform.position.y < -6)
         {
