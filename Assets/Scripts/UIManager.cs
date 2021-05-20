@@ -29,6 +29,9 @@ public class UIManager : MonoBehaviour
     
     private GameManager _gameManager;
     
+    [SerializeField]
+    private Text _waveCompleteText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +40,8 @@ public class UIManager : MonoBehaviour
         _restartText.gameObject.SetActive(false);
 
         _gameOverText.gameObject.SetActive(false);
+
+        _waveCompleteText.gameObject.SetActive(false);
 
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         if(_gameManager == null)
@@ -85,9 +90,9 @@ public class UIManager : MonoBehaviour
         while (true)
         {
             _gameOverText.gameObject.SetActive(true);
-
+            _waveCompleteText.gameObject.SetActive(false);
             yield return new WaitForSeconds(0.5f);
-
+            _waveCompleteText.gameObject.SetActive(false);
             _gameOverText.gameObject.SetActive(false);
 
             yield return new WaitForSeconds(0.5f);
@@ -98,4 +103,6 @@ public class UIManager : MonoBehaviour
     {
         _thrusterPower.value = power;
     }
+
+  
 }

@@ -31,6 +31,8 @@ public class Enemy : MonoBehaviour
 
     float _xOffset = 0;
 
+    private bool _alive = true;
+
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -55,40 +57,31 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        CalculateMovement();
-
-        if(Time.time > _canFire)
+        if (_alive)
         {
-            _fireRate = Random.Range(3f, 7f);
-            _canFire = Time.time + _fireRate;
-            GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
-            //Debug.Break();
-            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+            CalculateMovement();
 
-            for( int i=0; i< lasers.Length; i++)
+            if (Time.time > _canFire)
             {
-                lasers[i].AssignEnemyLaser();
+                _fireRate = Random.Range(3f, 7f);
+                _canFire = Time.time + _fireRate;
+                GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+                //Debug.Break();
+                Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+
+                for (int i = 0; i < lasers.Length; i++)
+                {
+                    lasers[i].AssignEnemyLaser();
+                }
+
+
+                //Debug.Break();
             }
-
-
-            //Debug.Break();
         }
-
     }
 
     void CalculateMovement()
     {
-        //if side to side movement
-        //if movingLeft
-        //    move left
-        //    if reached max left
-        //        movingRight
-        //   move right
-        //          if moved max righ
-        //           move left
-
-       
 
         if(_movingLaterally)
         {
@@ -99,8 +92,8 @@ public class Enemy : MonoBehaviour
                 {
                     _movingLeft = false;
 
-                    Debug.Log("xOffset: " + _xOffset.ToString());
-                    Debug.Log("MLM:" + _maxLateralMove.ToString());
+                 //   Debug.Log("xOffset: " + _xOffset.ToString());
+                 //   Debug.Log("MLM:" + _maxLateralMove.ToString());
                 }
             }
             else
@@ -109,8 +102,8 @@ public class Enemy : MonoBehaviour
                 if(_xOffset > _maxLateralMove)
                 {
                     _movingLeft = true;
-                    Debug.Log("xOffset: " + _xOffset.ToString());
-                    Debug.Log("MLM:" + _maxLateralMove.ToString());
+                  //  Debug.Log("xOffset: " + _xOffset.ToString());
+                 //   Debug.Log("MLM:" + _maxLateralMove.ToString());
                 }
             }
             
@@ -134,6 +127,8 @@ public class Enemy : MonoBehaviour
             _speed = 0;
             _anim.SetTrigger("OnEnemyDeath");
 
+            _alive = false;
+
             if (_player != null)
             {
                 _player.Damage();
@@ -155,6 +150,8 @@ public class Enemy : MonoBehaviour
                 Destroy(other.gameObject);
             }
 
+            _alive = false;
+
             if(_player != null)
             {
                 _player.AddScore(10);
@@ -172,6 +169,16 @@ public class Enemy : MonoBehaviour
         
            
     }
- 
+    public void DestroyEnemy()
+    {
+        _speed = 0;
+        _anim.SetTrigger("OnEnemyDeath");
+
+        _alive = false;
+
+        _audio.Play();
+
+        Destroy(gameObject, 2.8f);
+    }
 
 }

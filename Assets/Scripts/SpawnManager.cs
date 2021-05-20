@@ -21,6 +21,8 @@ public class SpawnManager : MonoBehaviour
 
     private bool _spawning = true;
 
+    private int _enemiesSpawned = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,8 +31,10 @@ public class SpawnManager : MonoBehaviour
 
     public void StartSpawning()
     {
+        _spawning = true;
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
+        
     }
 
     // Update is called once per frame
@@ -79,4 +83,14 @@ public class SpawnManager : MonoBehaviour
     {
         _spawning = false;
     }
+
+    public void StopSpawing()
+    {
+        _spawning = false;
+    }
+    public int GetEnemiesSpawned()
+    {
+        return _enemiesSpawned;
+    }
+   
 }

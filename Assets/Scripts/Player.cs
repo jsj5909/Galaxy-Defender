@@ -46,6 +46,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _thrusterSpeed = 10f;
 
+    [SerializeField]
+    private WaveManager _waveManager;
+
     private int _shieldStrength = 3;
 
     private AudioSource _audio;
@@ -325,6 +328,8 @@ public class Player : MonoBehaviour
         _score += points;
 
         _uiManager.UpdateScore(_score);
+
+        _waveManager.IncrementKillCount();
     }
 
     public void RefillAmmo()
