@@ -201,7 +201,7 @@ public class Player : MonoBehaviour
 
     }
 
-
+   
     void FireLaser()
     {
         _canFire = Time.time + _fireRate;

@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour
     {
         _isGameOver = true;
     }
-
+    public bool IsGameOver()
+    {
+        return _isGameOver;
+    }
 
 }

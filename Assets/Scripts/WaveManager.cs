@@ -30,14 +30,17 @@ public class WaveManager : MonoBehaviour
     [SerializeField]
     private int _minimumEnemiesPerWaive = 8;
 
-    private bool _waveTransitioning = false; 
-    
+    private bool _waveTransitioning = false;
 
+    
 
     // Start is called before the first frame update
     void Start()
     {
         _enemiesInWave = _currentWave * _waveEnemyScalingFactor + _minimumEnemiesPerWaive;
+
+
+       
     }
 
     // Update is called once per frame
@@ -57,9 +60,16 @@ public class WaveManager : MonoBehaviour
             {
                 _spawnManager.StopSpawing();
 
-                Enemy[] enemies = FindObjectsOfType<Enemy>();
+               Enemy[] enemies = FindObjectsOfType<Enemy>();
+                YellowEnemy[] yellowEnemies = FindObjectsOfType<YellowEnemy>();
+
                 
+
                 foreach(Enemy enemy in enemies)
+                {
+                    enemy.DestroyEnemy();
+                }
+                foreach (YellowEnemy enemy in yellowEnemies)
                 {
                     enemy.DestroyEnemy();
                 }
@@ -125,5 +135,10 @@ public class WaveManager : MonoBehaviour
     public void IncrementKillCount()
     {
         _killsThisWave += 1;
+    }
+
+    public int GetCurrentWave()
+    {
+        return _currentWave;
     }
 }

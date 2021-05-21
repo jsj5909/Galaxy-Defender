@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class YellowEnemy : MonoBehaviour
 {
     [SerializeField] float _speed = 4;
 
@@ -15,7 +15,10 @@ public class Enemy : MonoBehaviour
     AudioSource _audio;
 
     [SerializeField]
-    private GameObject _laserPrefab;
+    private GameObject _beamLaser;
+
+    [SerializeField]
+    private float _beamActivationTime = 3;
 
     [SerializeField]
     private float _maxLateralMove = 7;
@@ -24,12 +27,14 @@ public class Enemy : MonoBehaviour
 
     private bool _movingLeft = false;
 
-    
+
     private float _fireRate = 3.0f;
 
     private float _canFire = -1.0f;
 
     float _xOffset = 0;
+
+    float _yDestination = 0;
 
     private bool _alive = true;
 
@@ -41,16 +46,9 @@ public class Enemy : MonoBehaviour
 
         _audio = GetComponent<AudioSource>();
 
-        int lateralMove = Random.Range(0, 2);
+        _beamLaser.gameObject.SetActive(false);
 
-        if(lateralMove == 0)
-        {
-            _movingLaterally = false;
-        }
-        else
-        {
-            _movingLaterally = true;
-        }
+        _yDestination = Random.Range(1, 5);
         
     }
 
@@ -61,63 +59,55 @@ public class Enemy : MonoBehaviour
         {
             CalculateMovement();
 
-            if (Time.time > _canFire)
+            if (Time.time > _canFire && (transform.position.y <= _yDestination))  //dont start firing until we finish the drop
             {
-                _fireRate = Random.Range(3f, 7f);
+                _fireRate = Random.Range(5f, 7f);
                 _canFire = Time.time + _fireRate;
-                GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
-                //Debug.Break();
-                Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
-
-                for (int i = 0; i < lasers.Length; i++)
-                {
-                    lasers[i].AssignEnemyLaser();
-                }
-
-
-                //Debug.Break();
+                StartCoroutine(ActivateBeam());
             }
         }
+    }
+
+    IEnumerator ActivateBeam()
+    {
+        _beamLaser.gameObject.SetActive(true);
+        yield return new WaitForSeconds(_beamActivationTime);
+        _beamLaser.gameObject.SetActive(false);
     }
 
     void CalculateMovement()
     {
 
-        if(_movingLaterally)
+        if (transform.position.y > _yDestination)
         {
-            if(_movingLeft)
+            transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        }
+        else
+        {
+            if(transform.position.x < -10)
             {
-                _xOffset -= 0.015f;
-                if( _xOffset < -_maxLateralMove)
-                {
-                    _movingLeft = false;
-
-                 //   Debug.Log("xOffset: " + _xOffset.ToString());
-                 //   Debug.Log("MLM:" + _maxLateralMove.ToString());
-                }
+                _movingLeft = false;
+            }
+            if(transform.position.x > 10)
+            {
+                _movingLeft = true;
+            }
+            
+            
+            if (_movingLeft)
+            {
+                transform.Translate(Vector3.left * _speed * Time.deltaTime);
+                
             }
             else
             {
-                _xOffset += 0.01f;
-                if(_xOffset > _maxLateralMove)
-                {
-                    _movingLeft = true;
-                  //  Debug.Log("xOffset: " + _xOffset.ToString());
-                 //   Debug.Log("MLM:" + _maxLateralMove.ToString());
-                }
+                transform.Translate(Vector3.right * _speed * Time.deltaTime);
             }
-            
         }
 
+        
 
-        transform.Translate((Vector3.down + new Vector3(_xOffset,0,0)) * _speed * Time.deltaTime);
 
-        if (transform.position.y < -6)
-        {
-            float randomX = Random.Range(-10, 10);
-
-            transform.position = new Vector3(randomX, 5.15f, 0);
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -136,12 +126,13 @@ public class Enemy : MonoBehaviour
 
             _audio.Play();
 
+            //Destroy(gameObject, 2.8f);
             DestroyEnemy();
 
-            
+
         }
 
-        if(other.gameObject.tag == "Laser" || other.gameObject.tag == "Player_Beam_Weapon")
+        if (other.gameObject.tag == "Laser" || other.gameObject.tag == "Player_Beam_Weapon")
         {
             _speed = 0;
 
@@ -152,7 +143,7 @@ public class Enemy : MonoBehaviour
 
             _alive = false;
 
-            if(_player != null)
+            if (_player != null)
             {
                 _player.AddScore(10);
             }
@@ -160,17 +151,17 @@ public class Enemy : MonoBehaviour
             _audio.Play();
 
             Destroy(GetComponent<Collider2D>());
+            //Destroy(gameObject, 2.8f);
             DestroyEnemy();
 
             _anim.SetTrigger("OnEnemyDeath");
         }
 
-
-        
-           
     }
     public void DestroyEnemy()
     {
+        _beamLaser.gameObject.SetActive(false);
+        
         _speed = 0;
         _anim.SetTrigger("OnEnemyDeath");
 
@@ -178,7 +169,8 @@ public class Enemy : MonoBehaviour
 
         _audio.Play();
 
+        
+
         Destroy(gameObject, 2.8f);
     }
-
 }
