@@ -351,6 +351,16 @@ public class Player : MonoBehaviour
 
         _uiManager.UpdateLives(_lives);
     }
+
+    public void ReduceAmmo()
+    {
+        _currentAmmo -= 3;
+
+        if (_currentAmmo < 0)
+            _currentAmmo = 0;
+
+        _uiManager.UpdateAmmo(_currentAmmo);
+    }
 }
 
   

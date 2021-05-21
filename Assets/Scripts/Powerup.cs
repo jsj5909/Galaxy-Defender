@@ -56,6 +56,9 @@ public class Powerup : MonoBehaviour
                     case 5:
                         player.BeamActive();
                         break;
+                    case 6:
+                        player.ReduceAmmo();
+                        break;
                     default:
                         break;
                 }
