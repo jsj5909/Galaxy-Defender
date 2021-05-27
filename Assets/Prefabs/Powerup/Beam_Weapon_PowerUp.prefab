@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7974910151933139911}
   m_Layer: 0
   m_Name: Beam_Weapon_PowerUp
-  m_TagString: Untagged
+  m_TagString: Power_Up
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

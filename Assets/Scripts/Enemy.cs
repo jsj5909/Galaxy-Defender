@@ -111,6 +111,7 @@ public class Enemy : MonoBehaviour
             
             if (Time.time > _canFire)
             {
+                
                 _fireRate = Random.Range(3f, 7f);
                 _canFire = Time.time + _fireRate;
 
@@ -125,15 +126,49 @@ public class Enemy : MonoBehaviour
                      lasers[i].AssignEnemyLaser();
                  }
 
-                 if(transform.position.y < _player.transform.position.y)
-                {
-                    for(int i=0; i< lasers.Length; i++)
+                 if(_player != null)
+                 {
+                    if (transform.position.y < _player.transform.position.y)
                     {
-                        lasers[i].EnemyShootingBehind();
+                        for (int i = 0; i < lasers.Length; i++)
+                        {
+                            lasers[i].EnemyShootingBehind();
+                        }
                     }
+
                 }
                 
                 //Debug.Break();
+            }
+        }
+
+        ScanForPickup();
+        
+    }
+
+    void ScanForPickup()
+    {
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position + new Vector3(0, -2, 0), Vector3.down,20);
+
+        
+
+        if(hitInfo.collider != null)
+        {
+            Debug.DrawRay(transform.position + new Vector3(0, -2, 0), Vector3.down, Color.green);
+
+
+            if (hitInfo.collider.tag == "Power_Up")
+            {
+                Debug.Log("Hit PowerUp");
+                
+                GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+                //Debug.Break();
+                Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+
+                for (int i = 0; i < lasers.Length; i++)
+                {
+                    lasers[i].AssignEnemyLaser();
+                }
             }
         }
     }
