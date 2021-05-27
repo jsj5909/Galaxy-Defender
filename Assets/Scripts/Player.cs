@@ -243,15 +243,7 @@ public class Player : MonoBehaviour
 
         _lives -= 1;
 
-        if (_lives == 2)
-        {
-            _leftEngine.SetActive(true);
-        }
-
-        if (_lives == 1)
-        {
-            _rightEngine.SetActive(true);
-        }
+        UpdateDamageGraphics();
 
         _uiManager.UpdateLives(_lives);
 
@@ -272,9 +264,32 @@ public class Player : MonoBehaviour
             Camera.main.GetComponent<CameraShake>().ShakeCamera();
         }
 
-
+    
 
     }
+
+    private void UpdateDamageGraphics()
+    {
+        if(_lives == 3)
+        {
+            _leftEngine.SetActive(false);
+            _rightEngine.SetActive(false);
+        }
+
+        if (_lives == 2)
+        {
+            _leftEngine.SetActive(true);
+            _rightEngine.SetActive(false);
+        }
+
+        if (_lives == 1)
+        {
+            _rightEngine.SetActive(true);
+            _leftEngine.SetActive(true);
+        }
+    }
+
+
 
     public void BeamActive()
     {
@@ -286,7 +301,7 @@ public class Player : MonoBehaviour
 
     IEnumerator BeamPowerDownRoutine()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(8);
         _beamPrefab.SetActive(false);
         _isBeamActive = false;
 
@@ -300,7 +315,7 @@ public class Player : MonoBehaviour
 
     IEnumerator TripleShotPowerDownRoutine()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(8f);
         _isTripleShotActive = false;
     }
 
@@ -312,7 +327,7 @@ public class Player : MonoBehaviour
     IEnumerator SpeedPowerDownRoutine()
     {
         _speed = _speedBoost;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(8);
         _speed = _normalSpeed;
     }
 
@@ -350,6 +365,7 @@ public class Player : MonoBehaviour
 
 
         _uiManager.UpdateLives(_lives);
+        UpdateDamageGraphics();
     }
 
     public void ReduceAmmo()

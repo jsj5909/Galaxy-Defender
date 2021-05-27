@@ -21,6 +21,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject[] _powerUps;
 
+    private List<GameObject>_commonPowerUps;
+
     private bool _spawning = true;
 
     private int _enemiesSpawned = 0;
@@ -32,6 +34,8 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _commonPowerUps = new List<GameObject>() { _powerUps[0], _powerUps[1], _powerUps[2], _powerUps[6] };
+       
         _waveManager = GameObject.Find("WaveManager").GetComponent<WaveManager>();
 
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
@@ -39,6 +43,11 @@ public class SpawnManager : MonoBehaviour
 
     public void StartSpawning()
     {
+        //create list of powerups for (speed,shield,tripleshot,ammo reducer)
+
+
+
+
 
         if (_gameManager.IsGameOver() == false)
         {
@@ -57,7 +66,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnEnemyRoutine()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(2 - (_waveManager.GetCurrentWave()/100) % 100);
 
         int currentWave = _waveManager.GetCurrentWave();
 
@@ -85,14 +94,36 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerupRoutine()
     {
+        int powerUpIndex = 0;
+
         yield return new WaitForSeconds(2);
 
         while (_spawning)
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
 
-            int powerUpIndex = Random.Range(0, _powerUps.Length);
+            
+            
+            int lootType = Random.Range(0, 100);
+            
+            if(lootType <= 40)
+            {
+                powerUpIndex = 3;    //ammo is index 3
+            }
+            else if( lootType > 40 && lootType < 70)
+            {
+                powerUpIndex = Random.Range(0, 4); //common powerups speed, triple shot, shields, ammo reducer
+            }
+            else if(lootType >= 70 && lootType <90)
+            {
+                powerUpIndex = 5;//this is the beam weapon powerup
+            }
+            else
+            {
+                powerUpIndex = 4; //health power up
+            }
 
+          
             GameObject newPowerUp = Instantiate(_powerUps[powerUpIndex], posToSpawn, Quaternion.identity);
 
             yield return new WaitForSeconds(Random.Range(3, 8));
