@@ -113,16 +113,26 @@ public class Enemy : MonoBehaviour
             {
                 _fireRate = Random.Range(3f, 7f);
                 _canFire = Time.time + _fireRate;
-                GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
-                //Debug.Break();
-                Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
 
-                for (int i = 0; i < lasers.Length; i++)
+                
+                
+                 GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+                    //Debug.Break();
+                 Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+
+                 for (int i = 0; i < lasers.Length; i++)
+                 {
+                     lasers[i].AssignEnemyLaser();
+                 }
+
+                 if(transform.position.y < _player.transform.position.y)
                 {
-                    lasers[i].AssignEnemyLaser();
+                    for(int i=0; i< lasers.Length; i++)
+                    {
+                        lasers[i].EnemyShootingBehind();
+                    }
                 }
-
-
+                
                 //Debug.Break();
             }
         }
@@ -254,7 +264,7 @@ public class Enemy : MonoBehaviour
 
             _audio.Play();
 
-            Destroy(GetComponent<Collider2D>());
+           
             DestroyEnemy();
 
             _anim.SetTrigger("OnEnemyDeath");
@@ -264,8 +274,30 @@ public class Enemy : MonoBehaviour
         
            
     }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player_Beam_Weapon")
+        {
+            if (_shieldActive)
+            {
+                DisableShields();
+                return;
+            }
+            else
+            {
+                DestroyEnemy();
+            }
+        }
+    }
     public void DestroyEnemy()
     {
+
+        if (_shieldActive)
+            DisableShields();
+        
+        Destroy(GetComponent<Collider2D>());
+
         _speed = 0;
         _anim.SetTrigger("OnEnemyDeath");
 
