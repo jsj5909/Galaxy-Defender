@@ -20,6 +20,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _maxLateralMove = 7;
 
+    [SerializeField] 
+    private GameObject _shield;
+
     private bool _movingLaterally = false;
 
     private bool _movingLeft = false;
@@ -33,9 +36,15 @@ public class Enemy : MonoBehaviour
 
     private bool _alive = true;
 
+    private bool _shieldActive = false;
+
+    private WaveManager _waveManager;
+
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
+
+        _waveManager = GameObject.Find("WaveManager").GetComponent<WaveManager>();
 
         _anim = GetComponent<Animator>();
 
@@ -51,6 +60,16 @@ public class Enemy : MonoBehaviour
         {
             _movingLaterally = true;
         }
+
+
+        
+        int shields = Random.Range(0, 5);
+        if(shields > (_waveManager.GetCurrentWave() + 1) )   //chances of shields active scales with wave
+        {
+            _shieldActive = true;
+            _shield.SetActive(true);
+        }
+
         
     }
 
@@ -118,12 +137,28 @@ public class Enemy : MonoBehaviour
 
             transform.position = new Vector3(randomX, 5.15f, 0);
         }
+
+        if (transform.position.x >= 11.3)
+        {
+            transform.position = new Vector3(-11.3f, transform.position.y, 0);
+        }
+        else if (transform.position.x < -11.3)
+        {
+            transform.position = new Vector3(11.3f, transform.position.y, 0);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player")
         {
+            if (_shieldActive)
+            {
+                DisableShields();
+                return;
+            }
+
+
             _speed = 0;
             _anim.SetTrigger("OnEnemyDeath");
 
@@ -143,6 +178,14 @@ public class Enemy : MonoBehaviour
 
         if(other.gameObject.tag == "Laser" || other.gameObject.tag == "Player_Beam_Weapon")
         {
+            if(_shieldActive)
+            {
+                DisableShields();
+                return;
+            }
+            
+            
+            
             _speed = 0;
 
             if (other.gameObject.tag == "Laser")
@@ -180,5 +223,13 @@ public class Enemy : MonoBehaviour
 
         Destroy(gameObject, 2.8f);
     }
+
+    private void DisableShields()
+    {
+        _shield.SetActive(false);
+        _shieldActive = false;
+    }
+
+
 
 }
