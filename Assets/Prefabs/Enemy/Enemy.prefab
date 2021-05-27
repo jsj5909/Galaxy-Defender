@@ -153,7 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 2
   _laserPrefab: {fileID: 6010363814324785452, guid: 0203c11d760d57f44898cd2780a27e8a, type: 3}
-  _maxLateralMove: 7
+  _maxLateralMove: 3
   _shield: {fileID: 2153752858203355725}
 --- !u!212 &6806864485951876221
 SpriteRenderer:

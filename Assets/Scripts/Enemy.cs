@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     private GameObject _laserPrefab;
 
     [SerializeField]
-    private float _maxLateralMove = 7;
+    private float _maxLateralMove = 5;
 
     [SerializeField] 
     private GameObject _shield;
@@ -39,6 +39,9 @@ public class Enemy : MonoBehaviour
     private bool _shieldActive = false;
 
     private WaveManager _waveManager;
+
+    private bool _ramming = false;
+    private bool _hasRammedPlayer = false;
 
     void Start()
     {
@@ -64,7 +67,7 @@ public class Enemy : MonoBehaviour
 
         
         int shields = Random.Range(0, 5);
-        if(shields > (_waveManager.GetCurrentWave() + 1) )   //chances of shields active scales with wave
+        if(shields < _waveManager.GetCurrentWave() )   //chances of shields active scales with wave
         {
             _shieldActive = true;
             _shield.SetActive(true);
@@ -78,8 +81,34 @@ public class Enemy : MonoBehaviour
     {
         if (_alive)
         {
-            CalculateMovement();
 
+            if (_ramming == false)
+            {
+
+                if (_player != null)
+                {
+                    if (Vector3.Distance(_player.transform.position, transform.position) < 4.0f)
+                   {
+                       _ramming = true;
+                    }
+                }
+
+            }
+
+
+            if (_player != null)
+            {
+                if (_ramming == true && _hasRammedPlayer == false)
+                {
+                    RamPlayer();
+                }
+                else
+                {
+                    CalculateMovement();
+                }
+
+            }
+            
             if (Time.time > _canFire)
             {
                 _fireRate = Random.Range(3f, 7f);
@@ -99,6 +128,20 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private void RamPlayer()
+    {
+
+        Vector3 playerDirection = (_player.transform.position - transform.position).normalized;   
+
+        transform.Translate(playerDirection * _speed * Time.deltaTime);
+
+        if(transform.position.y < _player.transform.position.y)
+        {
+            _ramming = false;
+        }
+    }
+
+   
     void CalculateMovement()
     {
 
@@ -111,8 +154,8 @@ public class Enemy : MonoBehaviour
                 {
                     _movingLeft = false;
 
-                 //   Debug.Log("xOffset: " + _xOffset.ToString());
-                 //   Debug.Log("MLM:" + _maxLateralMove.ToString());
+                   // Debug.Log("xOffset: " + _xOffset.ToString());
+                   // Debug.Log("MLM:" + _maxLateralMove.ToString());
                 }
             }
             else
@@ -121,8 +164,8 @@ public class Enemy : MonoBehaviour
                 if(_xOffset > _maxLateralMove)
                 {
                     _movingLeft = true;
-                  //  Debug.Log("xOffset: " + _xOffset.ToString());
-                 //   Debug.Log("MLM:" + _maxLateralMove.ToString());
+                  // Debug.Log("xOffset: " + _xOffset.ToString());
+                  //  Debug.Log("MLM:" + _maxLateralMove.ToString());
                 }
             }
             
@@ -130,6 +173,9 @@ public class Enemy : MonoBehaviour
 
 
         transform.Translate((Vector3.down + new Vector3(_xOffset,0,0)) * _speed * Time.deltaTime);
+
+        //add fixed amount for lateral move
+       
 
         if (transform.position.y < -6)
         {
@@ -150,8 +196,14 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        
+        
         if (other.gameObject.tag == "Player")
         {
+            _ramming = false;
+            _hasRammedPlayer = true;
+
+
             if (_shieldActive)
             {
                 DisableShields();
