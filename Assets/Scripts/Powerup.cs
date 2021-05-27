@@ -14,7 +14,15 @@ public class Powerup : MonoBehaviour
   
     [SerializeField]
     private AudioClip _clip;
-    
+
+    private Player _player;
+
+
+    private void Start()
+    {
+        _player = GameObject.Find("Player").GetComponent<Player>();
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -23,6 +31,16 @@ public class Powerup : MonoBehaviour
 
         if (transform.position.y < -6f)
             Destroy(gameObject);
+
+        if (Input.GetKey(KeyCode.C))
+        {
+            Vector3 directionToPlayer = (_player.transform.position - transform.position).normalized;
+
+            transform.Translate(directionToPlayer * _speed * Time.deltaTime);
+            
+        }
+
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

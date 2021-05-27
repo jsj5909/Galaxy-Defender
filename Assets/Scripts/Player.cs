@@ -149,7 +149,10 @@ public class Player : MonoBehaviour
             }
             _audio.PlayOneShot(_laserSound);
         }
-        Debug.Log("Lives " + _lives);
+
+        
+
+        //Debug.Log("Lives " + _lives);
 
         if (_shieldsActive)
         {
