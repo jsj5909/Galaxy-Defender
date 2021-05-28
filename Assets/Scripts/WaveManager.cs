@@ -78,7 +78,30 @@ public class WaveManager : MonoBehaviour
                 StartCoroutine(WaveTransitionFlicker());
             }
         }
+/////Debuggin purposes ONly//////////////////////////////////////////////////////////////////////////
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            _spawnManager.StopSpawing();
 
+            Enemy[] enemies = FindObjectsOfType<Enemy>();
+            YellowEnemy[] yellowEnemies = FindObjectsOfType<YellowEnemy>();
+
+
+
+            foreach (Enemy enemy in enemies)
+            {
+                enemy.DestroyEnemy();
+            }
+            foreach (YellowEnemy enemy in yellowEnemies)
+            {
+                enemy.DestroyEnemy();
+            }
+
+
+
+            StartCoroutine(WaveTransitionFlicker());
+        }
+///////End Debugging lines///////////////////////////////////////////////////////////////////////////////
 
     }
     private void PrepareNextWave()

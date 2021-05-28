@@ -55,6 +55,9 @@ public class Enemy : MonoBehaviour
 
         int lateralMove = Random.Range(0, 2);
 
+        //debug only
+        //lateralMove = 0;
+
         if(lateralMove == 0)
         {
             _movingLaterally = false;
@@ -154,7 +157,7 @@ public class Enemy : MonoBehaviour
 
         if(hitInfo.collider != null)
         {
-            Debug.DrawRay(transform.position + new Vector3(0, -2, 0), Vector3.down, Color.green);
+            //Debug.DrawRay(transform.position + new Vector3(0, -2, 0), Vector3.down, Color.green);
 
 
             if (hitInfo.collider.tag == "Power_Up")
@@ -349,6 +352,9 @@ public class Enemy : MonoBehaviour
         _shieldActive = false;
     }
 
-
+    public bool IsAlive()
+    {
+        return _alive;
+    }
 
 }
