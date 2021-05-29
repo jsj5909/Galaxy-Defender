@@ -108,15 +108,19 @@ public class SpawnManager : MonoBehaviour
             
             if(lootType <= 40)
             {
-                powerUpIndex = 3;    //ammo is index 3
+                powerUpIndex = 6;    //ammo is index 6
             }
             else if( lootType > 40 && lootType < 70)
             {
                 powerUpIndex = Random.Range(0, 4); //common powerups speed, triple shot, shields, ammo reducer
             }
-            else if(lootType >= 70 && lootType <90)
+            else if(lootType >= 70 && lootType <80)
             {
                 powerUpIndex = 5;//this is the beam weapon powerup
+            }
+            else if(lootType >=80 && lootType < 90)
+            {
+                powerUpIndex = 7;    //missile is index 7
             }
             else
             {

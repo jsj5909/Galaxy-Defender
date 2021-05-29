@@ -10,14 +10,20 @@ public class EnemyBeam : MonoBehaviour
 
     private void Start()
     {
-        _player = GameObject.Find("Player").GetComponent<Player>();
+        if (_player != null)
+        {
+            _player = GameObject.Find("Player").GetComponent<Player>();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player")
         {
-            _player.Damage();
+            if (_player != null)
+            {
+                _player.Damage();
+            }
         }
     }
 

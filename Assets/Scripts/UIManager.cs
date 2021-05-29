@@ -26,6 +26,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Slider _thrusterPower;
+
+    [SerializeField]
+    private Text _missileText;
     
     private GameManager _gameManager;
     
@@ -64,6 +67,11 @@ public class UIManager : MonoBehaviour
     public void UpdateAmmo(int ammo)
     {
         _ammoText.text = "Ammo: " + ammo.ToString() + "/15";
+    }
+
+    public void UpdateMissileText(int missiles)
+    {
+        _missileText.text = "Missiles: " + missiles.ToString() + "/10";
     }
 
     public void UpdateLives(int currentLives)

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : EnemyBaseClass
 {
     [SerializeField] float _speed = 4;
 
@@ -244,8 +244,8 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        
-        
+
+
         if (other.gameObject.tag == "Player")
         {
             _ramming = false;
@@ -273,14 +273,19 @@ public class Enemy : MonoBehaviour
 
             DestroyEnemy();
 
-            
+
         }
 
-        if(other.gameObject.tag == "Laser" || other.gameObject.tag == "Player_Beam_Weapon")
+        if (other.gameObject.tag == "Laser" || other.gameObject.tag == "Player_Beam_Weapon" || other.gameObject.tag == "Missile")
         {
             if(_shieldActive)
             {
                 DisableShields();
+
+                if (other.gameObject.tag != "Player_Beam_Weapon")
+                {
+                    Destroy(other.gameObject);
+                }
                 return;
             }
             
@@ -289,6 +294,11 @@ public class Enemy : MonoBehaviour
             _speed = 0;
 
             if (other.gameObject.tag == "Laser")
+            {
+                Destroy(other.gameObject);
+            }
+
+            if (other.gameObject.tag == "Missile")
             {
                 Destroy(other.gameObject);
             }

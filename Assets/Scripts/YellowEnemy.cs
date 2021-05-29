@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class YellowEnemy : MonoBehaviour
+public class YellowEnemy : EnemyBaseClass
 {
     [SerializeField] float _speed = 4;
 
@@ -132,11 +132,16 @@ public class YellowEnemy : MonoBehaviour
 
         }
 
-        if (other.gameObject.tag == "Laser" || other.gameObject.tag == "Player_Beam_Weapon")
+        if (other.gameObject.tag == "Laser" || other.gameObject.tag == "Player_Beam_Weapon" || other.gameObject.tag == "Missile")
         {
             _speed = 0;
 
             if (other.gameObject.tag == "Laser")
+            {
+                Destroy(other.gameObject);
+            }
+
+            if(other.gameObject.tag == "Missile")
             {
                 Destroy(other.gameObject);
             }

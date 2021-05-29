@@ -77,6 +77,9 @@ public class Powerup : MonoBehaviour
                     case 6:
                         player.ReduceAmmo();
                         break;
+                    case 7:
+                        player.AddMissile();
+                        break;
                     default:
                         break;
                 }

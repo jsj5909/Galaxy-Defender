@@ -10,6 +10,7 @@ TagManager:
   - Enemy_Laser
   - Enemy_Beam
   - Power_Up
+  - Missile
   layers:
   - Default
   - TransparentFX

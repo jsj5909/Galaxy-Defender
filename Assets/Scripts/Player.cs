@@ -49,6 +49,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private WaveManager _waveManager;
 
+    [SerializeField]
+    private GameObject _missilePrefab;
+
     private int _shieldStrength = 3;
 
     private AudioSource _audio;
@@ -61,6 +64,7 @@ public class Player : MonoBehaviour
 
     private int _currentAmmo = 15;
 
+    private int _currentMissiles = 3;
 
     private bool _isTripleShotActive = false;
 
@@ -150,7 +154,16 @@ public class Player : MonoBehaviour
             _audio.PlayOneShot(_laserSound);
         }
 
-        
+        if(Input.GetKeyDown(KeyCode.LeftAlt))
+        {
+
+            if (_currentMissiles > 0)
+            {
+                Instantiate(_missilePrefab, transform.position, Quaternion.identity);
+                _currentMissiles--;
+                _uiManager.UpdateMissileText(_currentMissiles);
+            }
+        }
 
         //Debug.Log("Lives " + _lives);
 
@@ -292,7 +305,15 @@ public class Player : MonoBehaviour
         }
     }
 
-
+    public void AddMissile()
+    {
+        _currentMissiles++;
+        if(_currentMissiles > 10)
+        {
+            _currentMissiles = 10;
+        }
+        _uiManager.UpdateMissileText(_currentMissiles);
+    }
 
     public void BeamActive()
     {

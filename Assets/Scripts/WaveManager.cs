@@ -62,16 +62,20 @@ public class WaveManager : MonoBehaviour
 
                Enemy[] enemies = FindObjectsOfType<Enemy>();
                 YellowEnemy[] yellowEnemies = FindObjectsOfType<YellowEnemy>();
+                HomingMissile[] missiles = FindObjectsOfType<HomingMissile>();
 
-                
 
-                foreach(Enemy enemy in enemies)
+                foreach (Enemy enemy in enemies)
                 {
                     enemy.DestroyEnemy();
                 }
                 foreach (YellowEnemy enemy in yellowEnemies)
                 {
                     enemy.DestroyEnemy();
+                }
+                foreach (HomingMissile missile in missiles)
+                {
+                    missile.DestroyMissile();
                 }
 
 
@@ -85,7 +89,7 @@ public class WaveManager : MonoBehaviour
 
             Enemy[] enemies = FindObjectsOfType<Enemy>();
             YellowEnemy[] yellowEnemies = FindObjectsOfType<YellowEnemy>();
-
+            HomingMissile[] missiles = FindObjectsOfType<HomingMissile>();
 
 
             foreach (Enemy enemy in enemies)
@@ -96,7 +100,10 @@ public class WaveManager : MonoBehaviour
             {
                 enemy.DestroyEnemy();
             }
-
+            foreach (HomingMissile missile in missiles)
+            {
+                missile.DestroyMissile();
+            }
 
 
             StartCoroutine(WaveTransitionFlicker());
