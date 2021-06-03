@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 169263174320450775}
   - component: {fileID: 7006382298389853404}
   - component: {fileID: 3442131134995517115}
+  - component: {fileID: -5470888234625509190}
   m_Layer: 0
   m_Name: Beam
   m_TagString: Enemy_Beam
@@ -131,3 +132,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-5470888234625509190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293802741858361847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a82787be4ab803545aedea3e5d78e649, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

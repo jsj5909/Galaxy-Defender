@@ -61,11 +61,9 @@ public class HomingMissile : MonoBehaviour
 
         float distanceToClosestEnemy = Mathf.Infinity;
 
-      //  Enemy[] _enemies = FindObjectsOfType<Enemy>();
-      //  YellowEnemy[] _yellowEnemies = FindObjectsOfType<YellowEnemy>();
+      
         EnemyBaseClass[] enemies = FindObjectsOfType<EnemyBaseClass>();
         
-
         Debug.Log("Enemies Found: " + enemies.Length);
 
         foreach (EnemyBaseClass enemy in enemies)
@@ -93,7 +91,7 @@ public class HomingMissile : MonoBehaviour
             _speed = 0;
             _anim.SetTrigger("OnEnemyDeath");
 
-            Destroy(gameObject);
+            Destroy(gameObject,3);
         
 
     }

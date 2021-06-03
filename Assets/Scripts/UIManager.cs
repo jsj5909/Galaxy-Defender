@@ -28,6 +28,9 @@ public class UIManager : MonoBehaviour
     private Slider _thrusterPower;
 
     [SerializeField]
+    private Slider _BossHealth;
+
+    [SerializeField]
     private Text _missileText;
     
     private GameManager _gameManager;
@@ -45,6 +48,8 @@ public class UIManager : MonoBehaviour
         _gameOverText.gameObject.SetActive(false);
 
         _waveCompleteText.gameObject.SetActive(false);
+
+        _BossHealth.gameObject.SetActive(false);
 
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         if(_gameManager == null)
@@ -113,6 +118,22 @@ public class UIManager : MonoBehaviour
     public void SetThrusterPower(float power)
     {
         _thrusterPower.value = power;
+    }
+
+    public void SetBossHealth(float health)
+    {
+        _BossHealth.value = health;
+        
+    }
+
+    public void ShowBossHealth()
+    {
+        _BossHealth.gameObject.SetActive(true);
+    }
+
+    public void HideBossHealth()
+    {
+        _BossHealth.gameObject.SetActive(false);
     }
 
   

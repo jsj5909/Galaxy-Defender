@@ -11,12 +11,9 @@ public class SpawnManager : MonoBehaviour
     GameObject []  _enemyPrefabs;
     [SerializeField]
     private GameObject _EnemyContainer;
-    //[SerializeField]
-    //private GameObject _tripleShotPowerupPrefab;
-   // [SerializeField]
-   // private GameObject _SpeedBoostPowerupPrefab;
 
-    
+    [SerializeField]
+    private GameObject _bossPrefab;
 
     [SerializeField]
     private GameObject[] _powerUps;
@@ -46,13 +43,20 @@ public class SpawnManager : MonoBehaviour
         //create list of powerups for (speed,shield,tripleshot,ammo reducer)
 
 
-
-
-
         if (_gameManager.IsGameOver() == false)
         {
             _spawning = true;
-            StartCoroutine(SpawnEnemyRoutine());
+            if (_waveManager.IsBossWave())
+            {
+                Vector3 spawnPos = new Vector3(0, 10, 0);
+
+                Instantiate(_bossPrefab, spawnPos, Quaternion.identity);
+            }
+            else
+            {
+                StartCoroutine(SpawnEnemyRoutine());
+            }
+            
             StartCoroutine(SpawnPowerupRoutine());
         }
         

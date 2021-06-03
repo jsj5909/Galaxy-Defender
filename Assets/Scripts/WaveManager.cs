@@ -32,7 +32,7 @@ public class WaveManager : MonoBehaviour
 
     private bool _waveTransitioning = false;
 
-    
+    private bool _bossWave = false;
 
     // Start is called before the first frame update
     void Start()
@@ -117,7 +117,20 @@ public class WaveManager : MonoBehaviour
 
         _killsThisWave = 0;
 
-        _enemiesInWave = _currentWave * _waveEnemyScalingFactor + _minimumEnemiesPerWaive;   //8 is the minimum in a wave
+        if ((_currentWave % 5) == 0)
+        {
+            _bossWave = true;
+            _enemiesInWave = 1;
+        }
+        else
+        {
+            _bossWave = false;
+        }
+
+        if(_bossWave == false)
+        {
+            _enemiesInWave = _currentWave * _waveEnemyScalingFactor + _minimumEnemiesPerWaive;   //8 is the minimum in a wave
+        }
     }
 
     IEnumerator WaveTransitionFlicker()
@@ -126,7 +139,14 @@ public class WaveManager : MonoBehaviour
         
         float endFlicker = _waveCompleteFlickerTime + Time.time;
 
-        _waveCompleteText.text = "Wave " + _currentWave + " Complete";
+        if (_bossWave == true)
+        {
+            _waveCompleteText.text = "Boss " + _currentWave / 5 + " Destroyed";
+        }
+        else 
+        { 
+            _waveCompleteText.text = "Wave " + _currentWave + " Complete";
+        }
 
         while (Time.time < endFlicker)
         {
@@ -142,7 +162,15 @@ public class WaveManager : MonoBehaviour
         endFlicker = _waveCompleteFlickerTime + Time.time;
 
         PrepareNextWave();
-        _waveCompleteText.text = "Starting Wave " + _currentWave;
+
+        if (_bossWave == true)
+        {
+            _waveCompleteText.text = "Starting Boss Wave " + _currentWave/5;
+        }
+        else
+        {
+            _waveCompleteText.text = "Starting Wave " + _currentWave;
+        }
 
         while (Time.time < endFlicker)
         {
@@ -170,5 +198,10 @@ public class WaveManager : MonoBehaviour
     public int GetCurrentWave()
     {
         return _currentWave;
+    }
+
+    public bool IsBossWave()
+    {
+        return _bossWave;
     }
 }

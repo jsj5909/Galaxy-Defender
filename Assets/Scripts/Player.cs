@@ -253,11 +253,13 @@ public class Player : MonoBehaviour
     {
         if (_shieldsActive)
         {
+            Debug.LogError("removing a life");
             _shieldStrength--;
             return;
         }
 
         _lives -= 1;
+       // Debug.LogError("removing a life");
 
         UpdateDamageGraphics();
 
